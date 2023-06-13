@@ -13,14 +13,14 @@ logic clkdived_data, clkdived_all;
 logic [31:0] count;
 logic [31:0] rd_data;
 logic aud_en_sync;
-assign rstn=!BTNC;
 
-bin2pwm32bit bin2pwm(
+
+bin2pwm_32bit bin2pwm(
 			.clk(clkdived_all),
 			.aud_en(aud_en_sync),
 			.rstn(rstn),
 			.data_i(rd_data),
-			.pwm(AUD_PWM)
+			.pwm(pwm)
 			);
 
 tact_data data(
@@ -78,7 +78,6 @@ counter_data cntrd(
 // end
 
 
-endmodule
 
 
 endmodule

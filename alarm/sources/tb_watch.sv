@@ -7,10 +7,12 @@ module tb_watch();
 	//logic [7:0]AN;
 	//logic CA,CB,CC,CE,CD,CF,CG;
     logic [15:0] LED;
+    logic AUD_PWM;
 	top_artyx top(
 		.CLK100MHZ(clk),
 		.BTNC(rstn),
-		.LED(LED)
+		.LED(LED),
+		.AUD_PWM(AUD_PWM)
 		);
 
 	task waitin(input integer num_clk);

@@ -40,7 +40,7 @@ module apb_alarm(
 	logic [31:0] time_alarm;
 
 	////
-	logic alarm_rstn, alarm_en;
+	logic time_rstn, alarm_en;
 
 	logic [3:0] hourdec_init, hourone_init;
 	logic [3:0] mindec_init, minone_init;
@@ -126,7 +126,7 @@ module apb_alarm(
       pslverr_status <= PSEL_PREV;
     end
 
-    if (paddr_i > `RST) begin  // Register at the address doesn't exist
+    if (paddr_i > `TIME_NOW_ADDR) begin  // Register at the address doesn't exist
       pslverr_o <= 1;
       pslverr_status <= ADDRES;
     end
@@ -145,7 +145,7 @@ module apb_alarm(
   // WRITE REGS
   always_ff @(posedge pclk_i or negedge presetn_i) begin
     if (~presetn_i) begin
-      alarm_rstn <= '0;
+      time_rstn <= '0;
       alarm_en <='0;
       time_init   <= '0;
       time_alarm <= '0;
@@ -155,19 +155,19 @@ module apb_alarm(
         //   alarm_rstn <= pwdata_i;
         //   alarm_en<='0;
         // end
-        `TIME_INIT_ADDR begin
+        `TIME_INIT_ADDR: begin
           time_init <= pwdata_i;
           time_rstn<=pwdata_i[16];
         end
-        `TIME_ALARM_ADDR begin
+        `TIME_ALARM_ADDR: begin
         	time_alarm <= pwdata_i;
         	alarm_en<=pwdata_i[16];
 
         end
         default: begin
-        	alarm_rstn <= '1;
-     	 	time_init   <= '0;
-      		time_alarm <= '0;
+        	//time_rstn <= '1;
+     	 	//time_init   <= '0;
+      		//time_alarm <= '0;
         end
       endcase
     end
@@ -184,7 +184,7 @@ module apb_alarm(
         	prdata_o<=time_now;
         end
         default: begin
-        	prdata_o <= 32'hebbob;
+        	prdata_o <= 32'hebbeb;
         end
       endcase
     end

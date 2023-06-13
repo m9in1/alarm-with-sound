@@ -3,7 +3,8 @@ module top_artyx(
 	input BTNC, 
 	//output CA,CB,CC,CD,CE,CF,CG,
 	//output [7:0] AN,
-	output [15:0] LED
+	output [15:0] LED,
+	output AUD_PWM
 	);
 logic clk_sec;
 logic [3:0] hourdec_init, hourone_init, mindec_init, minone_init;
@@ -37,10 +38,12 @@ assign rstn = !BTNC;
 		.hourdec_bud(hourdec_bud),
 		.hourone_bud(hourone_bud),
 		.mindec_bud(mindec_bud),
-		.minone_bud(minone_bud),////input [3:0] hourdec_bud, hourone_bud, mindec_bud, minone_bud,
+		.minone_bud(minone_bud),
+		
+		.aud_pwm(AUD_PWM)////input [3:0] hourdec_bud, hourone_bud, mindec_bud, minone_bud,
 		
 	    //.clk_sec_o(clk_sec),//output clk_sec_o,
-	    .bud_state_o(bud_state_o)//output bud_state_o
+	    //.bud_state_o(bud_state_o)//output bud_state_o
 				);
 
 

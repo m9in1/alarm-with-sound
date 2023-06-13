@@ -5,13 +5,13 @@ module sound_artyx(
     output [15:0]LED,
 	output AUD_PWM
 );
-
+logic rstn;
 logic [15:0] data_rd;
-
+assign rstn=!BTNC;
 assign LED = data_rd;
 sound_top sound_top(
 	.clk(CLK100MHZ),
-	.rstn(!BTNC),
+	.rstn(rstn),
 	.aud_en(SW[0]),
 	.pwm(AUD_PWM),
 	.data_for_leds(data_rd)	);

@@ -73,7 +73,8 @@ module top_alarm(
 
 //msec				
 	clk_div #(
-		.N(1000),
+		//.N(1000), //real
+		.N(100),   //sim
 		.WIDTH(11)
 		)
 	clk_msec_module(
@@ -86,8 +87,8 @@ module top_alarm(
 
 //sec
     clk_div #(
-		.N(1000), //real
-		//.N(1),   //sim
+		//.N(1000), //real
+		.N(1),   //sim
 		.WIDTH(11)
 		)
 	clk_sec_module(
