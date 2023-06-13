@@ -3,16 +3,17 @@
 module tb_watch();
 
 
-	logic clk, rstn;
+	logic clk, rst;
 	//logic [7:0]AN;
 	//logic CA,CB,CC,CE,CD,CF,CG;
     logic [15:0] LED;
     logic AUD_PWM;
-	top_artyx top(
+	arty_secundomer top(
 		.CLK100MHZ(clk),
-		.BTNC(rstn),
-		.LED(LED),
-		.AUD_PWM(AUD_PWM)
+		.BTNC(0),
+		.BTNU(rst),
+		.LED(LED)
+//		.AUD_PWM(AUD_PWM)
 		);
 
 	task waitin(input integer num_clk);
@@ -24,15 +25,15 @@ module tb_watch();
 
 	endtask
 
-	always #10 clk=~clk;
+	always #5 clk=~clk;
 
 	initial begin
 		clk = 0;
-		rstn =0;
+		rst =0;
 		waitin(2);
-		rstn = 1;
+		rst = 1;
 		waitin(2);
-		rstn = 0;
+		rst = 0;
 
 
 
