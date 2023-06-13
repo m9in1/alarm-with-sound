@@ -8,12 +8,12 @@ module tb_watch();
 	//logic CA,CB,CC,CE,CD,CF,CG;
     logic [15:0] LED;
     logic AUD_PWM;
-	arty_secundomer top(
+	arty_watch top(
 		.CLK100MHZ(clk),
-		.BTNC(0),
-		.BTNU(rst),
-		.LED(LED)
-//		.AUD_PWM(AUD_PWM)
+		.BTNC(rst),
+		.BTNU(0),
+		.LED(LED),
+		.AUD_PWM(AUD_PWM)
 		);
 
 	task waitin(input integer num_clk);

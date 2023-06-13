@@ -39,7 +39,8 @@ initial decsec_cntr<=3'b0;
 
 
 
-wire hofsecpas = (pls_cntr==20'd999999);
+wire hofsecpas = //(pls_cntr==20'd999);
+(pls_cntr==20'd999999);
 
 always@(posedge clk or negedge rstn) begin
 	if(!rstn) begin

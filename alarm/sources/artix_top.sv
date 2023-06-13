@@ -36,7 +36,7 @@ module arty_watch(
 		.clk(CLK100MHZ),
 		.rstn(!BTNC),
 
-		.bud_on(1),
+		.bud_en(1),
 		.off_bud(BTNU),
 
 		

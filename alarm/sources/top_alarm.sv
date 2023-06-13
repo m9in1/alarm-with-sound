@@ -5,7 +5,7 @@ module top_alarm(
 	input off_bud,
 	input [3:0] hourdec_init, hourone_init, mindec_init, minone_init,
 	output [3:0] hourdec_now, hourone_now, mindec_now, minone_now,
-	input [3:0] hourdec_bud, hourone_bud, mindec_bud, minone_bud
+	input [3:0] hourdec_bud, hourone_bud, mindec_bud, minone_bud,
 		//output clk_sec_o,
 	//output bud_state_o,
 	output aud_pwm
