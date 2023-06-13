@@ -19,7 +19,7 @@ module top_alarm(
 	logic clk_sec, clk_disp, clk_msec, clk_usec, aud_en;
     assign clk_sec_o = clk_sec;
 	watch_bindec watch(
-		.clk(clk_sec),
+		.clk(clk),
 		//.clk_disp(clk_disp),//input 				clk,
 		.rstn(rstn),//input 				rstn,
 		.hourdec_init(hourdec_init),//input [3:0] 		hourdec_init,
@@ -46,7 +46,7 @@ module top_alarm(
 
 	sound_control sound_control(
 		//.clk_sec(clk_sec),
-		.clk_sec(clk_sec),
+		.clk_sec(clk),
 		.rstn(rstn),
 		.bud_on(bud_en),
 		.bud_state(bud_state_o),
@@ -56,46 +56,46 @@ module top_alarm(
 
 
 
-//usec
+// //usec
 
-		clk_div #(
-		.N(200),
-		.WIDTH(8)
-		)
-	clk_usec_module(
-		.clk(clk),
-		.rst_n(rstn),
-		.o_clk(clk_usec)
-				);
-
-
-
-
-//msec				
-	clk_div #(
-		//.N(1000), //real
-		.N(100),   //sim
-		.WIDTH(11)
-		)
-	clk_msec_module(
-		.clk(clk_usec),
-		.rst_n(rstn),
-		.o_clk(clk_msec)
-				);
+// 		clk_div #(
+// 		.N(200),
+// 		.WIDTH(8)
+// 		)
+// 	clk_usec_module(
+// 		.clk(clk),
+// 		.rst_n(rstn),
+// 		.o_clk(clk_usec)
+// 				);
 
 
 
-//sec
-    clk_div #(
-		//.N(1000), //real
-		.N(1),   //sim
-		.WIDTH(11)
-		)
-	clk_sec_module(
-		.clk(clk_msec),
-		.rst_n(rstn),
-		.o_clk(clk_sec)
-				);
+
+// //msec				
+// 	clk_div #(
+// 		//.N(1000), //real
+// 		.N(100),   //sim
+// 		.WIDTH(11)
+// 		)
+// 	clk_msec_module(
+// 		.clk(clk_usec),
+// 		.rst_n(rstn),
+// 		.o_clk(clk_msec)
+// 				);
+
+
+
+// //sec
+//     clk_div #(
+// 		//.N(1000), //real
+// 		.N(1),   //sim
+// 		.WIDTH(11)
+// 		)
+// 	clk_sec_module(
+// 		.clk(clk_msec),
+// 		.rst_n(rstn),
+// 		.o_clk(clk_sec)
+				//);
 	// div_clk
 	// #(.MAX_CNT(1000000000))//00))//????? its working for 100MHZ
 	//  sec_cnt(
