@@ -10,14 +10,12 @@ module watch(
 	output logic [3:0] 	hourdec_now,
 	output logic [3:0] 	hourone_now,
 	output logic [3:0]	mindec_now,
-	output logic [3:0] 	minone_now,
-
-
-    output reg [3:0] sec_cntr,
-    output reg [2:0] decsec_cntr
+	output logic [3:0] 	minone_now
 
 );
-reg en;
+
+reg [2:0] decsec_cntr;
+reg [3:0] sec_cntr;
 reg [19:0] pls_cntr;
 reg[3:0] decms_cntr;
 reg [3:0] edms_cntr;
@@ -30,7 +28,6 @@ reg [3:0] edms_cntr;
 
 
 
-initial en <= 1'b0;
 
 initial pls_cntr<=20'b0;
 initial edms_cntr<=4'b0;
