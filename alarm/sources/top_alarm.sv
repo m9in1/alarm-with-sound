@@ -18,7 +18,7 @@ module top_alarm(
    
 	logic clk_sec, clk_disp, clk_msec, clk_usec, aud_en;
     assign clk_sec_o = clk_sec;
-	watch_bindec watch(
+	watch_bindec_wcnt watch(
 		.clk(clk),
 		//.clk_disp(clk_disp),//input 				clk,
 		.rstn(rstn),//input 				rstn,
