@@ -9,7 +9,7 @@ module bin2pwm_32bit(
 
 	logic [9:0] cntr;
 	logic [7:0] duty [3:0];
-	assign {duty[3], duty[2],duty[1], duty[0]} = {data_i[31:24], data_i[23:16], data_i[15:8], data_i[7:0]} ;
+	assign {duty[0], duty[1],duty[2], duty[3]} = {data_i[31:24], data_i[23:16], data_i[15:8], data_i[7:0]} ;
 
 	always@(posedge clk or negedge rstn) begin
 		    

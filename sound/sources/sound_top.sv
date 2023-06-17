@@ -41,8 +41,8 @@ clk_div_data(
 			);
 
 
-clk_div  #(.WIDTH(4),
-          .N(4))
+clk_div  #(.WIDTH(2),
+          .N(3))
 clk_div_all(
 			.clk(clk),
 			.rst_n(rstn),

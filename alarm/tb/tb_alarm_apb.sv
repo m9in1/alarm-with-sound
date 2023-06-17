@@ -39,7 +39,7 @@ module tb_alarm_apb ();
   // DUT //
   /////////
 
-  seg7_apb_wrapper DUT (
+  apb_alarm DUT (
       .pclk_i   (pclk_i),
       .presetn_i(presetn_i),
       .paddr_i  (paddr_i),
