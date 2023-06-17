@@ -3,6 +3,12 @@
 `define NUM_TO_DISP 32'h0000
 `define RESET 32'h0004
 
+
+`define TIME_INIT_ADDR 32'h0
+`define TIME_ALARM_ADDR 32'h4
+`define TIME_NOW_ADDR 32'h8
+`define ALARM_OFF_ADDR 32'hc
+
 module tb_alarm_apb ();
 
   ////////////////
@@ -71,30 +77,7 @@ module tb_alarm_apb ();
   // Tasks //
   ///////////
 
-  // Reset
-
-  task reset();
-    fork
-      begin
-        presetn_i <= 1'b0;
-        #(5 * CLK_PERIOD);
-        presetn_i <= 1'b1;
-
-        exec_apb_write_trans(`RESET, 32'hffffffff, 4'b1111, 4'b0000);
-        #(5 * CLK_PERIOD);
-        exec_apb_write_trans(`RESET, 32'b0, 4'b1111, 4'b0000);
-      end
-      begin
-        paddr_i   <= '0;
-        psel_i    <= '0;
-        penable_i <= '0;
-        pwrite_i  <= '0;
-        pwdata_i  <= '0;
-        pstrb_i   <= '0;
-      end
-    join
-  endtask
-
+  
   // APB
 
   task automatic exec_apb_write_trans(input bit [31:0] paddr, input bit [31:0] pwdata,
@@ -151,65 +134,126 @@ module tb_alarm_apb ();
 
   // Specific
 
-  task get_data(output bit [31:0] data, input bit pslverr);
-    exec_apb_read_trans(`NUM_TO_DISP, data, pslverr);
+  // Reset
+
+  task init();
+    fork
+      begin
+        presetn_i <= 1'b0;
+        #(5 * CLK_PERIOD);
+        presetn_i <= 1'b1;
+
+        exec_apb_write_trans(`TIME_INIT_ADDR, 32'h10000, 4'b1111, 4'b0000);
+        #(5 * CLK_PERIOD);
+        exec_apb_write_trans(`TIME_INIT_ADDR, 32'h00000, 4'b1111, 4'b0000);
+        #(5 * CLK_PERIOD);
+        exec_apb_write_trans(`TIME_INIT_ADDR, 32'h10000, 4'b1111, 4'b0000);
+
+      end
+      begin
+        paddr_i   <= '0;
+        psel_i    <= '0;
+        penable_i <= '0;
+        pwrite_i  <= '0;
+        pwdata_i  <= '0;
+        pstrb_i   <= '0;
+      end
+    join
   endtask
 
-  task set_data(input bit [31:0] data, input bit pslverr);
-    exec_apb_write_trans(`NUM_TO_DISP, data, 4'b1111, pslverr);
+
+
+  task time_set(input [31:0] time_init_data, output err);
+    logic [31:0] time_init_data_post;
+    time_init_data_post=time_init_data;
+    exec_apb_write_trans(`TIME_INIT_ADDR, time_init_data_post, 4'b1111, err);
+    #(5*CLK_PERIOD);
+    time_init_data_post[16] = 0;
+    exec_apb_write_trans(`TIME_INIT_ADDR, time_init_data_post, 4'b1111, err);
+     #(5*CLK_PERIOD);
+    time_init_data_post[16] = 1;
+    exec_apb_write_trans(`TIME_INIT_ADDR, time_init_data_post, 4'b1111, err);
+
+
   endtask
+
+  task alarm_set(input [31:0] alarm_init_data, output err);
+
+    exec_apb_write_trans(`TIME_ALARM_ADDR, alarm_init_data, 4'b1111, err);
+   
+
+
+  endtask
+
+  task time_now( output [31:0] time_now_data, output err);
+    exec_apb_read_trans(`TIME_NOW_ADDR, time_now_data, err);
+
+  endtask
+
+
+  // task get_data(output bit [31:0] data, input bit pslverr);
+  //   exec_apb_read_trans(`NUM_TO_DISP, data, pslverr);
+  // endtask
+
+  // task set_data(input bit [31:0] data, input bit pslverr);
+  //   exec_apb_write_trans(`NUM_TO_DISP, data, 4'b1111, pslverr);
+  // endtask
 
   // Tests
 
-  task reg_valid_read_write_test(int iterations = 10);
-    bit [31:0] data_in;
-    bit [31:0] data_out;
-    $display("\nStarting valid write/read (%0d iterations)", iterations);
-    for (int i = 0; i < iterations; i = i + 1) begin
-      $display("Iteration %0d", i);
-      foreach (data_in[i]) data_in[i] = $random();
-      set_data(data_in, 4'b0000);
-      // get_data(data_out, 4'b0000);
-      // if (data_in != data_out) begin
-      //   $error("DATA_IN[WRITE] != DATA_IN[READ]: %h != %h", data_in, data_out);
-      //   $stop();
-      // end
-    end
-  endtask
+  // task reg_valid_read_write_test(int iterations = 10);
+  //   bit [31:0] data_in;
+  //   bit [31:0] data_out;
+  //   $display("\nStarting valid write/read (%0d iterations)", iterations);
+  //   for (int i = 0; i < iterations; i = i + 1) begin
+  //     $display("Iteration %0d", i);
+  //     foreach (data_in[i]) data_in[i] = $random();
+  //     set_data(data_in, 4'b0000);
+  //     // get_data(data_out, 4'b0000);
+  //     // if (data_in != data_out) begin
+  //     //   $error("DATA_IN[WRITE] != DATA_IN[READ]: %h != %h", data_in, data_out);
+  //     //   $stop();
+  //     // end
+  //   end
+  // endtask
 
-  task reg_invalid_read_write_test(int iterations = 10);
-    bit [31:0] data_in;
-    $display("\nStarting invalid write/read (%0d iterations)", iterations);
-    for (int i = 0; i < iterations; i = i + 1) begin
-      $display("Iteration %0d", i);
-      foreach (data_in[i]) data_in[i] = $random();
-      exec_apb_write_trans(`RESET + 4, data_in, 4'b1111, 1'b1);
-      exec_apb_read_trans(`NUM_TO_DISP, data_in, 1'b1);
-    end
-  endtask
+  // task reg_invalid_read_write_test(int iterations = 10);
+  //   bit [31:0] data_in;
+  //   $display("\nStarting invalid write/read (%0d iterations)", iterations);
+  //   for (int i = 0; i < iterations; i = i + 1) begin
+  //     $display("Iteration %0d", i);
+  //     foreach (data_in[i]) data_in[i] = $random();
+  //     exec_apb_write_trans(`RESET + 4, data_in, 4'b1111, 1'b1);
+  //     exec_apb_read_trans(`NUM_TO_DISP, data_in, 1'b1);
+  //   end
+  // endtask
 
   typedef enum {
-    RESET = 0,
-    VALID_R_W_TEST = 1,
-    INVALID_R_W_TEST = 2,
-    DISPLAY_TEST = 3
+    INIT = 0,
+    TIME_SET = 1,
+    ALARM_SET = 2,
+    TIME_GET = 3
   } tests_names_t;
 
   tests_names_t curr_test;
-  bit [31:0] disp_num;
+  bit [31:0] data_to_reg;
+  bit [31:0] reg_to_data;
+  bit err_o;
   initial begin
     fork
       begin
-        curr_test = RESET;
-        reset();
-        curr_test = VALID_R_W_TEST;
-        reg_valid_read_write_test(100);
-        curr_test = INVALID_R_W_TEST;
-        reg_invalid_read_write_test(20);
-        curr_test = DISPLAY_TEST;
-        $display("\nStarting display numbers test");
-        disp_num = 32'hf514f842;
-        exec_apb_write_trans(`NUM_TO_DISP, disp_num, 4'b1111, 4'b0000);
+        curr_test = INIT;
+        init();
+        curr_test=TIME_SET;
+        #(2*CLK_PERIOD);
+        data_to_reg=32'h11052;
+        time_set(data_to_reg, err_o);
+        #(2*CLK_PERIOD);
+        curr_test = TIME_GET;
+        time_now(reg_to_data, err_o);
+        #(2*CLK_PERIOD);
+        curr_test = ALARM_SET;
+        alarm_set(32'h11100);
         #(85000 * CLK_PERIOD);
         $display("\nAll tests done");
       end

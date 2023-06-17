@@ -151,6 +151,7 @@ module apb_alarm(
       alarm_en <='0;
       time_init   <= '0;
       time_alarm <= '0;
+      off_alarm<= '0;
     end else if (psel_i && pwrite_i) begin
       case (paddr_i[11:0])
         // `RSTN_ADDR: begin
@@ -183,7 +184,7 @@ module apb_alarm(
   // READ REGS
   always_ff @(posedge pclk_i or negedge presetn_i) begin
     if (~presetn_i) begin
-
+      prdata_o<='0;
     end else if (psel_i && !pwrite_i) begin
       case (paddr_i[11:0])
         `TIME_NOW_ADDR: begin
