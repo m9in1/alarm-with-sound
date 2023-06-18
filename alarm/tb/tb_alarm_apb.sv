@@ -244,8 +244,8 @@ module tb_alarm_apb ();
       begin
         curr_test = INIT;
         init();
-        curr_test=TIME_SET;
         #(2*CLK_PERIOD);
+        curr_test=TIME_SET;
         data_to_reg=32'h11052;
         time_set(data_to_reg, err_o);
         #(2*CLK_PERIOD);
@@ -253,7 +253,7 @@ module tb_alarm_apb ();
         time_now(reg_to_data, err_o);
         #(2*CLK_PERIOD);
         curr_test = ALARM_SET;
-        alarm_set(32'h11100);
+        alarm_set(32'h11100, err_o);
         #(85000 * CLK_PERIOD);
         $display("\nAll tests done");
       end

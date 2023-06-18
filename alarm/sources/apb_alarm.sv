@@ -31,13 +31,12 @@ module apb_alarm(
 	`define TIME_INIT_ADDR 32'h0
 	`define TIME_ALARM_ADDR 32'h4
 	`define TIME_NOW_ADDR 32'h8
-  `define ALARM_OFF_ADDR 32'hc
+    `define ALARM_OFF_ADDR 32'hc
 
 
 	///registers
 	logic [31:0] time_init;
 	logic [31:0] time_now;
-	logic [31:0] alarm_enable_rstn;
 	logic [31:0] time_alarm;
 
 	////
@@ -65,10 +64,10 @@ module apb_alarm(
 
 	top_alarm alarm(
 			.clk(pclk_i),//input clk,
-			.rstn(alarm_rstn),//input rstn,
+			.rstn(time_rstn),//input rstn,
 			.bud_en(alarm_en),//input bud_en,
 			.aud_pwm(aud_pwm),
-      .off_bud(off_alarm),
+            .off_bud(off_alarm),
 			.hourdec_bud(hourdec_alarm),
 			.hourone_bud(hourone_alarm),
 			.mindec_bud(mindec_alarm),
@@ -163,12 +162,12 @@ module apb_alarm(
 
         end
         `TIME_INIT_ADDR: begin
-          time_init <= pwdata_i;
-          time_rstn<=pwdata_i[16];
+          time_init <= {pwdata_i[1],pwdata_i[0]};
+          time_rstn<=pwdata_i[2];
         end
         `TIME_ALARM_ADDR: begin
-        	time_alarm <= pwdata_i;
-        	alarm_en<=pwdata_i[16];
+        	time_alarm <= {pwdata_i[1],pwdata_i[0]};
+        	alarm_en<=pwdata_i[2];
 
         end
         default: begin
