@@ -14,7 +14,7 @@ module apb_alarm(
     input logic pwrite_i,
 
     // Write
-    input logic [3:0][7:0] pwdata_i,
+    input logic [31:0]     pwdata_i,
     input logic [3:0]      pstrb_i,
 
     // Slave
@@ -162,12 +162,12 @@ module apb_alarm(
 
         end
         `TIME_INIT_ADDR: begin
-          time_init <= {pwdata_i[1],pwdata_i[0]};
-          time_rstn<=pwdata_i[2];
+          time_init <= pwdata_i[15:0];
+          time_rstn<=pwdata_i[16];
         end
         `TIME_ALARM_ADDR: begin
-        	time_alarm <= {pwdata_i[1],pwdata_i[0]};
-        	alarm_en<=pwdata_i[2];
+        	time_alarm <= pwdata_i[15:0];
+        	alarm_en<=pwdata_i[16];
 
         end
         default: begin

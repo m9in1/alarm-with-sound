@@ -148,7 +148,7 @@ module tb_alarm_apb ();
         exec_apb_write_trans(`TIME_INIT_ADDR, 32'h00000, 4'b1111, 4'b0000);
         #(5 * CLK_PERIOD);
         exec_apb_write_trans(`TIME_INIT_ADDR, 32'h10000, 4'b1111, 4'b0000);
-
+        
       end
       begin
         paddr_i   <= '0;
@@ -249,6 +249,7 @@ module tb_alarm_apb ();
         data_to_reg=32'h11052;
         time_set(data_to_reg, err_o);
         #(2*CLK_PERIOD);
+        data_to_reg=32'b0;
         curr_test = TIME_GET;
         time_now(reg_to_data, err_o);
         #(2*CLK_PERIOD);
