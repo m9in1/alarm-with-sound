@@ -1,4 +1,4 @@
-Hello. Its Project Alarm for Artix A7.
+Hello. Its Project Alarm for Arty A7.
 
 Features:
 1. Its submodule for Pulpino, you can message with Alarm module from UART
