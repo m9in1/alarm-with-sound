@@ -1,4 +1,13 @@
-Hello. Its Project Alarm for Arty A7. Very alpha. 
+Hello. Its Project Alarm for Artix A7.
+
+Features:
+1. Its submodule for Pulpino, you can message with Alarm module from UART
+2. Its have working 7-segment display
+3. From UART you can set, reset alarm, time
+4. This module have audio_pwm module, but sound is bad((
+
+
+
 My plan:
 
 1. Making first minimal modules, thinkig about future design
